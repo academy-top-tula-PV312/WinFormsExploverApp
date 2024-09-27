@@ -29,22 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("Russia", 0);
-            ListViewItem listViewItem2 = new ListViewItem("England", 3);
-            ListViewItem listViewItem3 = new ListViewItem("Argentina", 2);
-            ListViewItem listViewItem4 = new ListViewItem("Austria", 1);
-            ListViewItem listViewItem5 = new ListViewItem("Angola");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExplorerForm));
-            TreeNode treeNode1 = new TreeNode("Узел0");
-            TreeNode treeNode2 = new TreeNode("Узел2");
-            TreeNode treeNode3 = new TreeNode("Узел5");
-            TreeNode treeNode4 = new TreeNode("Узел7");
-            TreeNode treeNode5 = new TreeNode("Узел8");
-            TreeNode treeNode6 = new TreeNode("Узел6", new TreeNode[] { treeNode4, treeNode5 });
-            TreeNode treeNode7 = new TreeNode("Узел3", new TreeNode[] { treeNode3, treeNode6 });
-            TreeNode treeNode8 = new TreeNode("Узел4");
-            TreeNode treeNode9 = new TreeNode("Узел1", new TreeNode[] { treeNode2, treeNode7, treeNode8 });
             splitContainer = new SplitContainer();
+            treeViewDirs = new TreeView();
             btnTableView = new Button();
             btnTileView = new Button();
             btnListView = new Button();
@@ -53,8 +40,11 @@
             listView = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
+            columnHeader3 = new ColumnHeader();
+            imageListIconsLarge = new ImageList(components);
+            imageListIcons = new ImageList(components);
             imageListFlags = new ImageList(components);
-            treeView1 = new TreeView();
+            btnPathUp = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
             splitContainer.Panel2.SuspendLayout();
@@ -70,10 +60,11 @@
             // 
             // splitContainer.Panel1
             // 
-            splitContainer.Panel1.Controls.Add(treeView1);
+            splitContainer.Panel1.Controls.Add(treeViewDirs);
             // 
             // splitContainer.Panel2
             // 
+            splitContainer.Panel2.Controls.Add(btnPathUp);
             splitContainer.Panel2.Controls.Add(btnTableView);
             splitContainer.Panel2.Controls.Add(btnTileView);
             splitContainer.Panel2.Controls.Add(btnListView);
@@ -84,10 +75,21 @@
             splitContainer.SplitterDistance = 274;
             splitContainer.TabIndex = 0;
             // 
+            // treeViewDirs
+            // 
+            treeViewDirs.Dock = DockStyle.Fill;
+            treeViewDirs.Font = new Font("Segoe UI", 14F);
+            treeViewDirs.Location = new Point(0, 0);
+            treeViewDirs.Name = "treeViewDirs";
+            treeViewDirs.Size = new Size(274, 569);
+            treeViewDirs.TabIndex = 0;
+            treeViewDirs.BeforeExpand += treeViewDirs_BeforeExpand;
+            treeViewDirs.BeforeSelect += treeViewDirs_BeforeExpand;
+            // 
             // btnTableView
             // 
             btnTableView.Font = new Font("Segoe UI", 14F);
-            btnTableView.Location = new Point(636, 486);
+            btnTableView.Location = new Point(687, 0);
             btnTableView.Name = "btnTableView";
             btnTableView.Size = new Size(135, 53);
             btnTableView.TabIndex = 1;
@@ -98,7 +100,7 @@
             // btnTileView
             // 
             btnTileView.Font = new Font("Segoe UI", 14F);
-            btnTileView.Location = new Point(495, 486);
+            btnTileView.Location = new Point(546, 0);
             btnTileView.Name = "btnTileView";
             btnTileView.Size = new Size(135, 53);
             btnTileView.TabIndex = 1;
@@ -109,7 +111,7 @@
             // btnListView
             // 
             btnListView.Font = new Font("Segoe UI", 14F);
-            btnListView.Location = new Point(354, 486);
+            btnListView.Location = new Point(405, 0);
             btnListView.Name = "btnListView";
             btnListView.Size = new Size(135, 53);
             btnListView.TabIndex = 1;
@@ -120,7 +122,7 @@
             // btnSmallView
             // 
             btnSmallView.Font = new Font("Segoe UI", 14F);
-            btnSmallView.Location = new Point(213, 486);
+            btnSmallView.Location = new Point(264, 0);
             btnSmallView.Name = "btnSmallView";
             btnSmallView.Size = new Size(135, 53);
             btnSmallView.TabIndex = 1;
@@ -131,9 +133,9 @@
             // btnLargeView
             // 
             btnLargeView.Font = new Font("Segoe UI", 14F);
-            btnLargeView.Location = new Point(72, 486);
+            btnLargeView.Location = new Point(137, 0);
             btnLargeView.Name = "btnLargeView";
-            btnLargeView.Size = new Size(135, 53);
+            btnLargeView.Size = new Size(121, 53);
             btnLargeView.TabIndex = 1;
             btnLargeView.Text = "Large View";
             btnLargeView.UseVisualStyleBackColor = true;
@@ -141,25 +143,59 @@
             // 
             // listView
             // 
-            listView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
+            listView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listView.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
             listView.Font = new Font("Segoe UI", 14F);
-            listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5 });
-            listView.LargeImageList = imageListFlags;
-            listView.Location = new Point(72, 56);
+            listView.FullRowSelect = true;
+            listView.GridLines = true;
+            listView.LargeImageList = imageListIconsLarge;
+            listView.Location = new Point(2, 59);
             listView.Name = "listView";
-            listView.Size = new Size(699, 412);
-            listView.SmallImageList = imageListFlags;
+            listView.Size = new Size(823, 510);
+            listView.SmallImageList = imageListIcons;
             listView.TabIndex = 0;
             listView.UseCompatibleStateImageBehavior = false;
             // 
             // columnHeader1
             // 
-            columnHeader1.Text = "Country";
+            columnHeader1.Text = "Name";
             columnHeader1.Width = 300;
             // 
             // columnHeader2
             // 
-            columnHeader2.Text = "Capital";
+            columnHeader2.Text = "Size";
+            columnHeader2.Width = 200;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "Date Create";
+            columnHeader3.Width = 150;
+            // 
+            // imageListIconsLarge
+            // 
+            imageListIconsLarge.ColorDepth = ColorDepth.Depth32Bit;
+            imageListIconsLarge.ImageStream = (ImageListStreamer)resources.GetObject("imageListIconsLarge.ImageStream");
+            imageListIconsLarge.TransparentColor = Color.Transparent;
+            imageListIconsLarge.Images.SetKeyName(0, "folder.png");
+            imageListIconsLarge.Images.SetKeyName(1, "file.png");
+            imageListIconsLarge.Images.SetKeyName(2, "docx.png");
+            imageListIconsLarge.Images.SetKeyName(3, "pdf.png");
+            imageListIconsLarge.Images.SetKeyName(4, "txt.png");
+            imageListIconsLarge.Images.SetKeyName(5, "jpg.png");
+            imageListIconsLarge.Images.SetKeyName(6, "png.png");
+            // 
+            // imageListIcons
+            // 
+            imageListIcons.ColorDepth = ColorDepth.Depth32Bit;
+            imageListIcons.ImageStream = (ImageListStreamer)resources.GetObject("imageListIcons.ImageStream");
+            imageListIcons.TransparentColor = Color.Transparent;
+            imageListIcons.Images.SetKeyName(0, "folder.png");
+            imageListIcons.Images.SetKeyName(1, "file.png");
+            imageListIcons.Images.SetKeyName(2, "docx.png");
+            imageListIcons.Images.SetKeyName(3, "pdf.png");
+            imageListIcons.Images.SetKeyName(4, "txt.png");
+            imageListIcons.Images.SetKeyName(5, "jpg.png");
+            imageListIcons.Images.SetKeyName(6, "png.png");
             // 
             // imageListFlags
             // 
@@ -171,31 +207,15 @@
             imageListFlags.Images.SetKeyName(2, "flag_argentina_enl.jpg");
             imageListFlags.Images.SetKeyName(3, "flag_england1.jpg");
             // 
-            // treeView1
+            // btnPathUp
             // 
-            treeView1.Location = new Point(27, 68);
-            treeView1.Name = "treeView1";
-            treeNode1.Name = "Узел0";
-            treeNode1.Text = "Узел0";
-            treeNode2.Name = "Узел2";
-            treeNode2.Text = "Узел2";
-            treeNode3.Name = "Узел5";
-            treeNode3.Text = "Узел5";
-            treeNode4.Name = "Узел7";
-            treeNode4.Text = "Узел7";
-            treeNode5.Name = "Узел8";
-            treeNode5.Text = "Узел8";
-            treeNode6.Name = "Узел6";
-            treeNode6.Text = "Узел6";
-            treeNode7.Name = "Узел3";
-            treeNode7.Text = "Узел3";
-            treeNode8.Name = "Узел4";
-            treeNode8.Text = "Узел4";
-            treeNode9.Name = "Узел1";
-            treeNode9.Text = "Узел1";
-            treeView1.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode9 });
-            treeView1.Size = new Size(221, 418);
-            treeView1.TabIndex = 0;
+            btnPathUp.Font = new Font("Segoe UI", 14F);
+            btnPathUp.Location = new Point(3, 0);
+            btnPathUp.Name = "btnPathUp";
+            btnPathUp.Size = new Size(109, 53);
+            btnPathUp.TabIndex = 2;
+            btnPathUp.Text = "Dir Up";
+            btnPathUp.UseVisualStyleBackColor = true;
             // 
             // ExplorerForm
             // 
@@ -224,6 +244,10 @@
         private Button btnLargeView;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private TreeView treeView1;
+        private TreeView treeViewDirs;
+        private ImageList imageListIcons;
+        private ImageList imageListIconsLarge;
+        private ColumnHeader columnHeader3;
+        private Button btnPathUp;
     }
 }
